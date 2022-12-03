@@ -6,7 +6,7 @@ def downCheck(a, b, c):
     return a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1]) > 0
 
 
-def convexHull(dots):
+def convexHull(dots):  # https://e-maxx.ru/algo/convex_hull_graham
     a = sorted(dots, key=lambda x: (x[0], x[1]))
     p1, p2 = a[0], a[-1]
     up, down = list(), list()
@@ -26,14 +26,63 @@ def convexHull(dots):
     for i in up:
         a.append(i)
     down.reverse()
+    down.pop()
     for i in down:
         a.append(i)
     return a
+
+
+def getArea(a, b, c):  # https://e-maxx.ru/algo/oriented_area
+    return abs((b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])) / 2
 
 
 def getQuad(dots):
     if len(dots) < 4:
         return []
     convex_hull = convexHull(dots)
-    print(convex_hull)
-    return convex_hull
+    max_area = 0
+    n = len(convex_hull)
+    for i in range(n):
+        for j in range(n):
+            if j == i:
+                continue
+            a, b = convex_hull[i], convex_hull[j]
+            first_area = 0
+            for k in range(min(i, j) + 1, max(j, i)):
+                if getArea(a, b, convex_hull[k]) > first_area:
+                    first_area = getArea(a, b, convex_hull[k])
+                    c = convex_hull[k]
+            second_area = 0
+            for k in range(max(i, j) + 1, min(j, i) + n):
+                if getArea(a, b, convex_hull[k % n]) > second_area:
+                    second_area = getArea(a, b, convex_hull[k % n])
+                    d = convex_hull[k % n]
+            if max_area < first_area + second_area and first_area * second_area != 0:
+                max_area = first_area + second_area
+                ans = [a, c, b, d]
+            '''
+            l, r = min(i, j), max(i, j)
+            while r - l > 1:
+                m1 = (2 * l + r) // 3
+                m2 = (l + 2 * r) // 3
+                if getArea(a, b, convex_hull[m1]) < getArea(a, b, convex_hull[m2]) and l != m1:
+                    l = m1
+                else:
+                    r = m2
+            c = convex_hull[l]
+            first_area = getArea(a, b, c)
+            l, r = max(i, j), n + min(i, j)
+            while r - l > 1:
+                m1 = (2 * l + r) // 3
+                m2 = (l + 2 * r) // 3
+                if getArea(a, b, convex_hull[m1 % n]) < getArea(a, b, convex_hull[m2 % n]) and l != m1:
+                    l = m1
+                else:
+                    r = m2
+            d = convex_hull[l % n]
+            second_area = getArea(a, b, d)
+            if max_area < first_area + second_area:
+                max_area = first_area + second_area
+                ans = [a, c, b, d]
+            '''
+    return ans

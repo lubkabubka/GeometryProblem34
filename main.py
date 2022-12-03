@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QPointF
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel
 
-from solve import *
+from solve import getQuad
 
 
 class Main(QWidget):
