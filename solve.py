@@ -47,17 +47,27 @@ def getQuad(dots):
             if j == i:
                 continue
             a, b = convex_hull[i], convex_hull[j]
-            first_area = 0
-            for k in range(min(i, j) + 1, max(j, i)):
-                if getArea(a, b, convex_hull[k]) > first_area:
-                    first_area = getArea(a, b, convex_hull[k])
-                    c = convex_hull[k]
-            second_area = 0
-            for k in range(max(i, j) + 1, min(j, i) + n):
-                if getArea(a, b, convex_hull[k % n]) > second_area:
-                    second_area = getArea(a, b, convex_hull[k % n])
-                    d = convex_hull[k % n]
-            if max_area < first_area + second_area and first_area * second_area != 0:
+            l, r = min(i, j) - 1, max(i, j) + 1
+            while r - l > 1:
+                m1 = (2 * l + r) // 3
+                m2 = (l + 2 * r) // 3
+                if getArea(a, b, convex_hull[m1]) < getArea(a, b, convex_hull[m2]) and l != m1:
+                    l = m1
+                else:
+                    r = m2
+            c = convex_hull[l]
+            first_area = getArea(a, b, c)
+            l, r = max(i, j) - 1, n + min(i, j) + 1
+            while r - l > 1:
+                m1 = (2 * l + r) // 3
+                m2 = (l + 2 * r) // 3
+                if getArea(a, b, convex_hull[m1 % n]) < getArea(a, b, convex_hull[m2 % n]) and l != m1:
+                    l = m1
+                else:
+                    r = m2
+            d = convex_hull[l % n]
+            second_area = getArea(a, b, d)
+            if max_area < first_area + second_area:
                 max_area = first_area + second_area
                 ans = [a, c, b, d]
     return ans
