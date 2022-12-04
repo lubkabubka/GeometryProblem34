@@ -60,29 +60,4 @@ def getQuad(dots):
             if max_area < first_area + second_area and first_area * second_area != 0:
                 max_area = first_area + second_area
                 ans = [a, c, b, d]
-            '''
-            l, r = min(i, j), max(i, j)
-            while r - l > 1:
-                m1 = (2 * l + r) // 3
-                m2 = (l + 2 * r) // 3
-                if getArea(a, b, convex_hull[m1]) < getArea(a, b, convex_hull[m2]) and l != m1:
-                    l = m1
-                else:
-                    r = m2
-            c = convex_hull[l]
-            first_area = getArea(a, b, c)
-            l, r = max(i, j), n + min(i, j)
-            while r - l > 1:
-                m1 = (2 * l + r) // 3
-                m2 = (l + 2 * r) // 3
-                if getArea(a, b, convex_hull[m1 % n]) < getArea(a, b, convex_hull[m2 % n]) and l != m1:
-                    l = m1
-                else:
-                    r = m2
-            d = convex_hull[l % n]
-            second_area = getArea(a, b, d)
-            if max_area < first_area + second_area:
-                max_area = first_area + second_area
-                ans = [a, c, b, d]
-            '''
     return ans
