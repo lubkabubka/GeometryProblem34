@@ -30,10 +30,23 @@ class Main(QWidget):
         self.add_btn.resize(180, 100)
         self.add_btn.move(round(self.width * 0.01), round(self.height * 0.01))
 
+
     def mousePressEvent(self, event):  # считывание точек с мышки
         x, y = event.x(), event.y()  # получаем координаты клика
         self.my_dots.append(((x - self.c_x + self.scale - 1) // self.scale, (self.c_y - y) // self.scale))
         self.update()
+
+    def keyPressEvent(self, event):  # регистрируем нажатие на клавиатуру
+        Main.focusInEvent()
+        if int(event.modifiers()) == Qt.ControlModifier:
+            if event.key() == Qt.Key_Left:  # стрелочка влево
+                self.c_x += 10 * self.scale
+            if event.key() == Qt.Key_Right:  # стрелочка вправо
+                self.c_x -= 10 * self.scale
+            if event.key() == Qt.Key_Down:  # стрелочка вниз
+                self.c_y -= 10 * self.scale
+            if event.key() == Qt.Key_Up:  # стрелочка вверх
+                self.c_y += 10 * self.scale
 
     def clear(self):
         self.my_dots.clear()
