@@ -39,14 +39,16 @@ def getArea(a, b, c):  # https://e-maxx.ru/algo/oriented_area
 def getQuad(dots):
     if len(dots) < 4:
         return []
-    convex_hull = convexHull(dots)
-    max_area = 0
+    convex_hull = convexHull(dots)  # получаем выпуклую оболочку
+    max_area = 0  # задаём изначальный максимум
     n = len(convex_hull)
     for i in range(n):
         for j in range(n):
             if j == i:
                 continue
+            # перебираем пары точек
             a, b = convex_hull[i], convex_hull[j]
+            # делаем бинпоиск
             l, r = min(i, j), max(i, j)
             while r - l > 1:
                 m1 = (l + r) // 2
@@ -73,8 +75,8 @@ def getQuad(dots):
             else:
                 d = convex_hull[r % n]
             second_area = getArea(a, b, d)
-            # print(a, b, c, d, first_area, second_area)
-            if max_area < first_area + second_area:
-                max_area = first_area + second_area
+            if max_area < first_area + second_area:  # сравниваем получившуюся площадь с максимальной
+                max_area = first_area + second_area  # если получалась больше, то обновляем
                 ans = [a, c, b, d]
+    print(f"Площадь искомого четырёхугольника {round(max_area)} пикс.")
     return ans
