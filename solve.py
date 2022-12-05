@@ -39,7 +39,9 @@ def getArea(a, b, c):  # https://e-maxx.ru/algo/oriented_area
 def getQuad(dots):
     if len(dots) < 4:
         return []
+    ans = []
     convex_hull = convexHull(dots)  # получаем выпуклую оболочку
+    print("Выпуклая оболочка:", *convex_hull)
     max_area = 0  # задаём изначальный максимум
     n = len(convex_hull)
     for i in range(n):
