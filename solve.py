@@ -7,6 +7,8 @@ def downCheck(a, b, c):
 
 
 def convexHull(dots):  # https://e-maxx.ru/algo/convex_hull_graham
+    if len(dots) == 1:
+        return dots
     a = sorted(dots, key=lambda x: (x[0], x[1]))
     p1, p2 = a[0], a[-1]
     up, down = list(), list()
@@ -41,10 +43,30 @@ def getQuad(dots):
     if len(dots) < 4:
         return []
     ans = []
-    convex_hull = convexHull(dots.copy())  # получаем выпуклую оболочку
+    convex_hull = convexHull(dots)  # ищем выпуклую "большую" оболочку
     print("Выпуклая оболочка:", *convex_hull)
-    if len(convex_hull) < 4:
+    if len(convex_hull) < 3:
         return []
+    if len(convex_hull) == 3:
+        hlp = list()  # временный массив
+        for x in dots:  # перебираем все точки
+            if x not in convex_hull:  # они не лежат на "большой" выпуклой оболочке
+                hlp.append(x)  # добавляем точку во временный массив
+        dots = convexHull(hlp)  # ищем "маленькую" выпуклую оболочку
+        ans = []  # инициализируем массив
+        min_triangle = getArea(convex_hull[0], convex_hull[1], convex_hull[2])
+        # минимальная площадь "лишнего" треугольника, изначально равная площади "большой" выпуклой оболочки
+        area = min_triangle  # инициализируем площадь четырёхугольника
+        for k in range(3):  # выбираем все стороны на "большой" выпуклой оболочке
+            a, b = convex_hull[k % 3], convex_hull[(k + 1) % 3]
+            for i in range(len(dots)):  # перебираем все точки "маленькой" выпуклой оболочки
+                if getArea(a, b, dots[i]) < min_triangle:  # если находим точку с лучшим ответом
+                    min_triangle = getArea(a, b, dots[i])
+                    ans = [a, dots[i], b, convex_hull[(k + 2) % 3]]
+                    # обновляем ответ
+        area -= min_triangle
+        print(f"Площадь искомого четырёхугольника {round(area)} пикс.")
+        return ans
     max_area = 0  # задаём изначальный максимум
     n = len(convex_hull)
     for i in range(n):

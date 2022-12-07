@@ -57,7 +57,7 @@ class Main(QWidget):
     def drawQaud(self, painter):
         painter.setPen(QPen(Qt.green, 3))  # выбираем цвет
         dots = list()  # инициализируем массив
-        for x, y in getQuad(self.my_dots):  # перебираем все точки из массива, который получаем в solve.getQuad
+        for x, y in getQuad(self.my_dots.copy()):  # перебираем все точки из массива, который получаем в solve.getQuad
             # преобразуем tuple -> QPoint с необходимыми преобразованиями и добавляем в массив
             dots.append(QPoint(self.c_x + x * self.scale, self.c_y - y * self.scale))
         painter.drawPolygon(dots)  # рисуем четырёхугольник
