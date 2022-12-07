@@ -18,11 +18,12 @@ def convexHull(dots):  # https://e-maxx.ru/algo/convex_hull_graham
             while len(up) >= 2 and not upCheck(up[-2], up[-1], a[i]):
                 up.pop()
             up.append(a[i])
-        if i == n or downCheck(p1, a[i], p2):
+        if i == n - 1 or downCheck(p1, a[i], p2):
             while len(down) >= 2 and not downCheck(down[-2], down[-1], a[i]):
                 down.pop()
             down.append(a[i])
     a.clear()
+    up.pop()
     for i in up:
         a.append(i)
     down.reverse()
@@ -40,8 +41,10 @@ def getQuad(dots):
     if len(dots) < 4:
         return []
     ans = []
-    convex_hull = convexHull(dots)  # получаем выпуклую оболочку
+    convex_hull = convexHull(dots.copy())  # получаем выпуклую оболочку
     print("Выпуклая оболочка:", *convex_hull)
+    if len(convex_hull) < 4:
+        return []
     max_area = 0  # задаём изначальный максимум
     n = len(convex_hull)
     for i in range(n):
